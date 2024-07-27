@@ -2,11 +2,19 @@ import React, { useState } from 'react';
 import { auth } from '../firebase';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import LogoLight from '../assets/Logo_light.png';
+import './Login.css'; // Assuming you have a CSS file named Login.css
+
+const Toast = ({ message, show }) => (
+  <div className={`toast ${show ? 'show' : ''}`}>
+    {message}
+  </div>
+);
 
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const [showToast, setShowToast] = useState(false);
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -23,12 +31,19 @@ const Login = () => {
       }
     } catch (err) {
       setError('Failed to log in. Please check your email and password.');
+      document.querySelector('.wrapper').classList.add('shake');
+      setShowToast(true);
+      setTimeout(() => {
+        document.querySelector('.wrapper').classList.remove('shake');
+        setShowToast(false);
+      }, 500);
     }
   };
 
   return (
     <div style={styles.container}>
-      <div style={styles.wrapper}>
+      <Toast message="Wrong credentials" show={showToast} />
+      <div className="wrapper" style={styles.wrapper}>
         <div style={styles.header}>
           <img src={LogoLight} alt="Logo" style={styles.logo} />
           <h1 style={styles.adminPanel}>Admin Panel</h1>
@@ -49,7 +64,7 @@ const Login = () => {
                 onChange={(e) => setEmail(e.target.value)}
               />
             </div>
-            <div>
+            <div style={styles.inputSpacing}>
               <label htmlFor="password" className="sr-only">Password</label>
               <input
                 id="password"
@@ -95,6 +110,7 @@ const styles = {
     justifyContent: 'center',
     backgroundColor: '#4c51bf', // Indigo background color
     padding: '12px 16px',
+    position: 'relative',
   },
   wrapper: {
     maxWidth: '400px',
@@ -105,6 +121,7 @@ const styles = {
     boxShadow: '9px 9px 16px #383b8b, -9px -9px 16px #5f63f0', // Adjusted shadow colors
     padding: '40px',
     boxSizing: 'border-box',
+    transition: 'transform 0.3s ease',
   },
   header: {
     display: 'flex',
@@ -122,7 +139,7 @@ const styles = {
     fontSize: '2rem',
     fontWeight: 'bold',
     color: '#ffffff', // White text color
-    textShadow: '1px 1px 2px #383b8b, -1px -1px 2px #5f63f0', // Adjusted shadow colors
+    textShadow: '2px 2px 4px rgba(0, 0, 0, 0.3)', // Text shadow
   },
   form: {
     marginTop: '12px',
@@ -154,6 +171,9 @@ const styles = {
   inputBottom: {
     borderBottomLeftRadius: '12px',
     borderBottomRightRadius: '12px',
+  },
+  inputSpacing: {
+    marginTop: '10px',
   },
   buttonWrapper: {
     marginTop: '20px',
@@ -196,5 +216,7 @@ const styles = {
     },
   },
 };
+
+
 
 export default Login;

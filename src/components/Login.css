@@ -1,0 +1,27 @@
+ Add the following CSS in Login.css
+ .shake {
+   animation: shake 0.5s;
+ }
+
+ @keyframes shake {
+   0%, 100% { transform: translateX(0); }
+   10%, 30%, 50%, 70%, 90% { transform: translateX(-10px); }
+   20%, 40%, 60%, 80% { transform: translateX(10px); }
+ }
+
+ .toast {
+   position: absolute;
+   top: 20px;
+   right: 20px;
+   background-color: #e53e3e;
+   color: #ffffff;
+   padding: 10px 20px;
+   border-radius: 8px;
+   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+   opacity: 0;
+   transition: opacity 0.3s;
+ }
+
+ .toast.show {
+   opacity: 1;
+ }

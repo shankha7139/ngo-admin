@@ -19,7 +19,7 @@ const Home = ({ events, galleryImages, bannerImages }) => {
     <div className="min-h-screen w-full bg-gradient-to-br from-indigo-600 via-indigo-700 to-indigo-800 py-8 px-4 sm:px-6 lg:px-8 relative">
       <button
         onClick={loadData}
-        className="absolute top-4 right-4 py-1 px-3 sm:py-2 sm:px-4 bg-indigo-600 text-white rounded-full hover:bg-indigo-700 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:ring-opacity-50 text-sm sm:text-base"
+        className="absolute top-1 right-4 py-1 px-3 sm:py-2 sm:px-4 bg-indigo-600 text-white rounded-full hover:bg-indigo-700 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:ring-opacity-50 text-sm sm:text-base"
       >
         Refresh
       </button>
