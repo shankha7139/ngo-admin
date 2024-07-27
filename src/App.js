@@ -1,13 +1,17 @@
-import React from "react";
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-import Home from "./pages/Home";
+// src/App.js
+import React from 'react';
+import MainLayout from './components/MainLayout';
+import { ThemeProvider, createTheme, CssBaseline } from '@mui/material';
 
-export default function App() {
+const theme = createTheme();
+
+function App() {
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<Home />} />
-      </Routes>
-    </BrowserRouter>
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
+      <MainLayout />
+    </ThemeProvider>
   );
 }
+
+export default App;
