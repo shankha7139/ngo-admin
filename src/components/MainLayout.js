@@ -5,6 +5,8 @@ import Sidebar from './Sidebar';
 import EventForm from './EventForm';
 import EventList from './EventList';
 import Home from './Home';
+import GalleryForm from './GalleryForm';
+import BannersForm from './BannersForm';
 import { db } from '../firebase';
 import { collection, getDocs } from 'firebase/firestore';
 
@@ -33,9 +35,9 @@ const MainLayout = () => {
           </Box>
         );
       case 'gallery':
-        return <Box sx={{ padding: 3 }}>Gallery Content</Box>;
+        return <GalleryForm />;
       case 'banners':
-        return <Box sx={{ padding: 3 }}>Banners Content</Box>;
+        return <BannersForm />;
       case 'settings':
         return <Box sx={{ padding: 3 }}>Settings Content</Box>;
       default:
