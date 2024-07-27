@@ -5,7 +5,7 @@ import { collection, addDoc } from 'firebase/firestore';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { TextField, Button, Typography, Paper, Box } from '@mui/material';
 
-const EventForm = () => {
+const EventForm = ({ onEventAdded }) => {
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
   const [date, setDate] = useState('');
@@ -30,6 +30,7 @@ const EventForm = () => {
     setDescription('');
     setDate('');
     setImages([]);
+    onEventAdded(); // Call the function to refresh the event list
   };
 
   return (

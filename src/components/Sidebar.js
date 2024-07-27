@@ -1,6 +1,7 @@
 // src/components/Sidebar.js
 import React from 'react';
 import { Drawer, List, ListItem, ListItemIcon, ListItemText, Divider, Toolbar, Typography } from '@mui/material';
+import HomeIcon from '@mui/icons-material/Home';
 import EventIcon from '@mui/icons-material/Event';
 import PhotoLibraryIcon from '@mui/icons-material/PhotoLibrary';
 import SettingsIcon from '@mui/icons-material/Settings';
@@ -25,6 +26,10 @@ const Sidebar = ({ onSelect }) => {
       </Toolbar>
       <Divider />
       <List>
+        <ListItem button onClick={() => onSelect('home')}>
+          <ListItemIcon><HomeIcon /></ListItemIcon>
+          <ListItemText primary="Home" />
+        </ListItem>
         <ListItem button onClick={() => onSelect('events')}>
           <ListItemIcon><EventIcon /></ListItemIcon>
           <ListItemText primary="Events" />

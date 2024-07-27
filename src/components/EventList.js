@@ -1,21 +1,8 @@
 // src/components/EventList.js
-import React, { useEffect, useState } from 'react';
-import { db } from '../firebase';
-import { collection, getDocs } from 'firebase/firestore';
+import React from 'react';
 import { Typography, Card, CardContent, CardMedia, Grid } from '@mui/material';
 
-const EventList = () => {
-  const [events, setEvents] = useState([]);
-
-  useEffect(() => {
-    const fetchEvents = async () => {
-      const querySnapshot = await getDocs(collection(db, 'events'));
-      setEvents(querySnapshot.docs.map(doc => ({ ...doc.data(), id: doc.id })));
-    };
-
-    fetchEvents();
-  }, []);
-
+const EventList = ({ events }) => {
   return (
     <div>
       <Typography variant="h5" gutterBottom>
