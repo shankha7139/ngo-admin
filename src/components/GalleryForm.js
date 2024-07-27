@@ -11,6 +11,7 @@ const GalleryForm = () => {
   const [imagePreviews, setImagePreviews] = useState([]);
   const [galleryImages, setGalleryImages] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [uploading, setUploading] = useState(false);
   const [confirmationDialogOpen, setConfirmationDialogOpen] = useState(false);
   const [deletingImage, setDeletingImage] = useState(null);
 
@@ -53,11 +54,18 @@ const GalleryForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const imageUrls = await Promise.all(images.map(image => handleImageUpload(image)));
-    await Promise.all(imageUrls.map(url => addDoc(collection(db, 'gallery'), { url })));
-    setImages([]);
-    setImagePreviews([]);
-    fetchGalleryImages();
+    setUploading(true);
+    try {
+      const imageUrls = await Promise.all(images.map(image => handleImageUpload(image)));
+      await Promise.all(imageUrls.map(url => addDoc(collection(db, 'gallery'), { url })));
+      setImages([]);
+      setImagePreviews([]);
+      fetchGalleryImages();
+    } catch (error) {
+      console.error("Error uploading images: ", error);
+    } finally {
+      setUploading(false);
+    }
   };
 
   const fetchGalleryImages = async () => {
@@ -117,8 +125,9 @@ const GalleryForm = () => {
           <button
             type="submit"
             className="w-full bg-blue-500 text-white py-2 sm:py-3 px-4 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition duration-150 ease-in-out transform hover:scale-105"
+            disabled={uploading}
           >
-            Upload to Gallery
+            {uploading ? <BouncingDotsLoader /> : 'Upload to Gallery'}
           </button>
         </form>
         <div className="px-6 py-4 sm:px-8 sm:py-6 bg-gray-50">

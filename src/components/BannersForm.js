@@ -11,6 +11,7 @@ const BannersForm = () => {
   const [imagePreviews, setImagePreviews] = useState([]);
   const [bannerImages, setBannerImages] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [uploading, setUploading] = useState(false);
   const [confirmationDialogOpen, setConfirmationDialogOpen] = useState(false);
   const [deletingImage, setDeletingImage] = useState(null);
 
@@ -53,11 +54,18 @@ const BannersForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const imageUrls = await Promise.all(images.map(image => handleImageUpload(image)));
-    await Promise.all(imageUrls.map(url => addDoc(collection(db, 'banners'), { url })));
-    setImages([]);
-    setImagePreviews([]);
-    fetchBannerImages();
+    setUploading(true);
+    try {
+      const imageUrls = await Promise.all(images.map(image => handleImageUpload(image)));
+      await Promise.all(imageUrls.map(url => addDoc(collection(db, 'banners'), { url })));
+      setImages([]);
+      setImagePreviews([]);
+      fetchBannerImages();
+    } catch (error) {
+      console.error("Error uploading images: ", error);
+    } finally {
+      setUploading(false);
+    }
   };
 
   const fetchBannerImages = async () => {
@@ -117,8 +125,9 @@ const BannersForm = () => {
           <button
             type="submit"
             className="w-full bg-blue-500 text-white py-2 sm:py-3 px-4 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition duration-150 ease-in-out transform hover:scale-105"
+            disabled={uploading}
           >
-            Upload Banners
+            {uploading ? <BouncingDotsLoader /> : 'Upload Banners'}
           </button>
         </form>
         <div className="px-6 py-4 sm:px-8 sm:py-6 bg-gray-50">
