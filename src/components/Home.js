@@ -4,7 +4,7 @@ import { Typography, Box } from '@mui/material';
 
 const Home = () => {
   return (
-    <Box sx={{ padding: 3 }}>
+    <Box className="p-4">
       <Typography variant="h4" gutterBottom>
         Welcome, Sir!
       </Typography>

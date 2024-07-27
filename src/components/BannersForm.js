@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { db, storage } from '../firebase';
 import { collection, addDoc, getDocs } from 'firebase/firestore';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
-import { TextField, Button, Typography, Paper, Box, Grid, Card, CardMedia } from '@mui/material';
+import { Button, Typography, Paper, Box, Grid, Card } from '@mui/material';
 
 const BannersForm = () => {
   const [images, setImages] = useState([]);
@@ -33,24 +33,26 @@ const BannersForm = () => {
   }, []);
 
   return (
-    <Paper elevation={3} sx={{ padding: 2, marginBottom: 4 }}>
+    <Paper className="p-4 mb-4 shadow-md">
       <Typography variant="h5" gutterBottom>
         Upload Banner Images
       </Typography>
-      <Box component="form" onSubmit={handleSubmit} noValidate sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-        <Button variant="contained" component="label">
+      <Box component="form" onSubmit={handleSubmit} className="space-y-4">
+        <Button variant="contained" component="label" className="w-full">
           Upload Images
           <input type="file" multiple hidden onChange={(e) => setImages([...e.target.files])} />
         </Button>
-        <Button type="submit" variant="contained" color="primary">
+        <Button type="submit" variant="contained" color="primary" className="w-full">
           Upload to Banners
         </Button>
       </Box>
-      <Grid container spacing={4} sx={{ marginTop: 2 }}>
+      <Grid container spacing={4} className="mt-4">
         {bannerImages.map((image) => (
           <Grid item key={image.id} xs={12} sm={6} md={4}>
-            <Card>
-              <CardMedia component="img" height="140" image={image.url} alt="Banner Image" />
+            <Card className="shadow-md">
+              <Box className="h-36 w-full overflow-hidden">
+                <img src={image.url} alt="Banner Image" className="w-full h-full object-cover" />
+              </Box>
             </Card>
           </Grid>
         ))}

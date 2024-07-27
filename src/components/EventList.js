@@ -1,6 +1,6 @@
 // src/components/EventList.js
 import React from 'react';
-import { Typography, Card, CardContent, CardMedia, Grid } from '@mui/material';
+import { Typography, Card, CardContent, Grid, Box } from '@mui/material';
 
 const EventList = ({ events }) => {
   return (
@@ -11,14 +11,11 @@ const EventList = ({ events }) => {
       <Grid container spacing={4}>
         {events.map(event => (
           <Grid item key={event.id} xs={12} sm={6} md={4}>
-            <Card>
+            <Card className="shadow-md">
               {event.images.length > 0 && (
-                <CardMedia
-                  component="img"
-                  height="140"
-                  image={event.images[0]}
-                  alt={event.name}
-                />
+                <Box className="h-36 w-full overflow-hidden">
+                  <img src={event.images[0]} alt={event.name} className="w-full h-full object-cover" />
+                </Box>
               )}
               <CardContent>
                 <Typography variant="h6">{event.name}</Typography>

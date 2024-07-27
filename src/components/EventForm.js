@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { db, storage } from '../firebase';
 import { collection, addDoc } from 'firebase/firestore';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
-import { TextField, Button, Typography, Paper, Box } from '@mui/material';
+import { TextField, Button, Typography, Paper } from '@mui/material';
 
 const EventForm = ({ onEventAdded }) => {
   const [name, setName] = useState('');
@@ -34,16 +34,17 @@ const EventForm = ({ onEventAdded }) => {
   };
 
   return (
-    <Paper elevation={3} sx={{ padding: 2, marginBottom: 4 }}>
+    <Paper className="p-4 mb-4 shadow-md">
       <Typography variant="h5" gutterBottom>
         Create Event
       </Typography>
-      <Box component="form" onSubmit={handleSubmit} noValidate sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+      <form onSubmit={handleSubmit} className="space-y-4">
         <TextField
           label="Event Name"
           value={name}
           onChange={(e) => setName(e.target.value)}
           required
+          fullWidth
         />
         <TextField
           label="Event Description"
@@ -52,6 +53,7 @@ const EventForm = ({ onEventAdded }) => {
           required
           multiline
           rows={4}
+          fullWidth
         />
         <TextField
           label="Event Date"
@@ -60,15 +62,16 @@ const EventForm = ({ onEventAdded }) => {
           onChange={(e) => setDate(e.target.value)}
           required
           InputLabelProps={{ shrink: true }}
+          fullWidth
         />
-        <Button variant="contained" component="label">
+        <Button variant="contained" component="label" className="w-full">
           Upload Images
           <input type="file" multiple hidden onChange={(e) => setImages([...e.target.files])} />
         </Button>
-        <Button type="submit" variant="contained" color="primary">
+        <Button type="submit" variant="contained" color="primary" className="w-full">
           Create Event
         </Button>
-      </Box>
+      </form>
     </Paper>
   );
 };

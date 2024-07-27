@@ -1,6 +1,5 @@
 // src/components/MainLayout.js
 import React, { useState, useEffect } from 'react';
-import { Box, Toolbar } from '@mui/material';
 import Sidebar from './Sidebar';
 import EventForm from './EventForm';
 import EventList from './EventList';
@@ -29,33 +28,29 @@ const MainLayout = () => {
         return <Home />;
       case 'events':
         return (
-          <Box sx={{ padding: 3 }}>
+          <div className="p-4">
             <EventForm onEventAdded={fetchEvents} />
             <EventList events={events} />
-          </Box>
+          </div>
         );
       case 'gallery':
         return <GalleryForm />;
       case 'banners':
         return <BannersForm />;
       case 'settings':
-        return <Box sx={{ padding: 3 }}>Settings Content</Box>;
+        return <div className="p-4">Settings Content</div>;
       default:
         return null;
     }
   };
 
   return (
-    <Box sx={{ display: 'flex' }}>
+    <div className="flex">
       <Sidebar onSelect={setSelectedTab} />
-      <Box
-        component="main"
-        sx={{ flexGrow: 1, bgcolor: 'background.default', p: 3 }}
-      >
-        <Toolbar />
+      <div className="flex-grow ml-16 md:ml-60 bg-gray-100 min-h-screen p-4 transition-all">
         {renderContent()}
-      </Box>
-    </Box>
+      </div>
+    </div>
   );
 };
 
