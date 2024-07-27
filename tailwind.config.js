@@ -19,6 +19,11 @@ module.exports = {
           '100%': { transform: 'translateY(-10px)' },
         },
       },
+      fontFamily: {
+        'sans': ['Helvetica', 'Arial', 'sans-serif'],
+        'serif': ['Times', 'Times New Roman', 'serif'],
+        'mono': ['Menlo', 'Monaco', 'Courier New', 'monospace']
+      }
     },
   },
   plugins: [],

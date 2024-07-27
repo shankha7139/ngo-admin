@@ -32,35 +32,38 @@ const Sidebar = ({ onSelect, selectedTab }) => {
   ];
 
   return (
-    <div className={`fixed inset-y-0 left-0 z-50 transition-all bg-gradient-to-br from-blue-100 via-blue-200 to-blue-300 shadow-md ${isExpanded ? 'w-60' : 'w-16'} md:w-60`}>
-      <div className="flex items-center justify-between h-16 bg-blue-400 text-blue-800 px-4">
+    <div className={`fixed inset-y-0 left-0 z-50 transition-all duration-300 bg-gradient-to-br from-indigo-600 via-indigo-700 to-indigo-800 shadow-xl ${isExpanded ? 'w-64' : 'w-20'} md:w-64`}>
+      <div className="flex items-center justify-between h-16 bg-indigo-800 text-white px-4">
         <h2 className={`text-xl font-bold ${isExpanded ? 'block' : 'hidden md:block'}`}>
           Admin Panel
         </h2>
-        <button className="md:hidden text-blue-800" onClick={toggleSidebar}>
+        <button className="md:hidden text-white hover:text-indigo-200 transition-colors" onClick={toggleSidebar}>
           {isExpanded ? <CloseIcon /> : <MenuIcon />}
         </button>
       </div>
-      <nav className="mt-8">
+      <nav className="mt-8 px-2">
         {menuItems.map((item) => (
           <button
             key={item.name}
             onClick={() => handleSelect(item.name)}
-            className={`w-full flex items-center py-3 px-4 transition-colors duration-200 ${
+            className={`w-full flex items-center py-3 px-4 rounded-lg transition-all duration-200 ${
               selectedTab === item.name
-                ? 'bg-blue-400 text-blue-800'
-                : 'text-blue-800 hover:bg-blue-200'
+                ? 'bg-indigo-500 text-white shadow-md'
+                : 'text-indigo-100 hover:bg-indigo-600 hover:text-white'
             }`}
           >
             <div className="flex items-center w-full">
               <item.icon className="mr-3 flex-shrink-0" />
-              <span className={`${isExpanded ? 'block' : 'hidden md:block'} text-left`}>
+              <span className={`${isExpanded ? 'block' : 'hidden md:block'} text-left font-medium`}>
                 {item.name.charAt(0).toUpperCase() + item.name.slice(1)}
               </span>
             </div>
           </button>
         ))}
       </nav>
+      <div className={`absolute bottom-4 left-0 right-0 text-center text-indigo-200 text-sm ${isExpanded ? 'block' : 'hidden md:block'}`}>
+        Version 1.0.1
+      </div>
     </div>
   );
 };

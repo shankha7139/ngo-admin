@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { db, storage } from '../firebase';
-import { collection, addDoc, getDocs, deleteDoc, doc } from 'firebase/firestore';
+import { collection, addDoc, getDocs, deleteDoc, doc, updateDoc } from 'firebase/firestore';
 import { ref, uploadBytes, getDownloadURL, deleteObject } from 'firebase/storage';
 import { TrashIcon, CalendarIcon, ImageIcon } from 'lucide-react';
 import BouncingDotsLoader from './BouncingDotsLoader';
@@ -41,22 +41,41 @@ const EventManagement = () => {
   const handleDeleteEvent = async (event) => {
     setLoading(true);
     try {
-      // Delete event images from storage
       await Promise.all(event.images.map(async (url) => {
         const storageRef = ref(storage, url);
         await deleteObject(storageRef);
       }));
 
-      // Delete event document from Firestore
       await deleteDoc(doc(db, 'events', event.id));
 
-      // Update the events state
       setEvents(events.filter(e => e.id !== event.id));
     } catch (error) {
       console.error("Error deleting event: ", error);
     } finally {
       setLoading(false);
       setDeletingEvent(null);
+    }
+  };
+
+  const handleSaveEvent = async (updatedEvent) => {
+    setFormLoading(true);
+    try {
+      const newImageUrls = await Promise.all(updatedEvent.newImages.map(image => handleImageUpload(image)));
+      const allImages = [...updatedEvent.images, ...newImageUrls];
+
+      await updateDoc(doc(db, 'events', updatedEvent.id), {
+        name: updatedEvent.name,
+        description: updatedEvent.description,
+        date: updatedEvent.date,
+        images: allImages,
+      });
+
+      setEvents(events.map(event => (event.id === updatedEvent.id ? { ...updatedEvent, images: allImages } : event)));
+    } catch (error) {
+      console.error("Error updating event: ", error);
+    } finally {
+      setFormLoading(false);
+      setModalOpen(false);
     }
   };
 
@@ -100,11 +119,11 @@ const EventManagement = () => {
   };
 
   return (
-    <div className="min-h-screen w-full bg-gradient-to-br from-blue-100 via-blue-200 to-blue-300 py-8 px-4 sm:px-6 lg:px-8 flex flex-col items-center">
+    <div className="min-h-screen w-full bg-gradient-to-br from-indigo-600 via-indigo-700 to-indigo-800 py-8 px-4 sm:px-6 lg:px-8 flex flex-col items-center">
       <div className="w-full max-w-4xl bg-white rounded-xl shadow-2xl overflow-hidden mb-8">
-        <div className="px-6 py-4 sm:px-8 sm:py-6 bg-blue-500 text-white">
+        <div className="px-6 py-4 sm:px-8 sm:py-6 bg-indigo-800 text-white">
           <h2 className="text-2xl sm:text-3xl font-extrabold">Create New Event</h2>
-          <p className="mt-2 text-sm sm:text-base text-blue-100">Fill in the details to create your amazing event!</p>
+          <p className="mt-2 text-sm sm:text-base text-indigo-200">Fill in the details to create your amazing event!</p>
         </div>
         <form onSubmit={handleSubmit} className="relative px-6 py-4 sm:px-8 sm:py-6 space-y-4 sm:space-y-6">
           {formLoading && (
@@ -120,7 +139,7 @@ const EventManagement = () => {
               value={name}
               onChange={(e) => setName(e.target.value)}
               required
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-150 ease-in-out"
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 transition duration-150 ease-in-out"
               placeholder="Enter event name"
             />
           </div>
@@ -132,7 +151,7 @@ const EventManagement = () => {
               onChange={(e) => setDescription(e.target.value)}
               required
               rows={4}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-150 ease-in-out"
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 transition duration-150 ease-in-out"
               placeholder="Describe your event"
             />
           </div>
@@ -145,7 +164,7 @@ const EventManagement = () => {
                 value={date}
                 onChange={(e) => setDate(e.target.value)}
                 required
-                className="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-150 ease-in-out"
+                className="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 transition duration-150 ease-in-out"
               />
               <CalendarIcon className="absolute left-3 top-2 text-gray-400 w-5 h-5" />
             </div>
@@ -156,7 +175,7 @@ const EventManagement = () => {
               <div className="space-y-1 text-center">
                 <ImageIcon className="mx-auto h-12 w-12 text-gray-400" />
                 <div className="flex text-sm text-gray-600">
-                  <label htmlFor="images" className="relative cursor-pointer bg-white rounded-md font-medium text-blue-600 hover:text-blue-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-blue-500">
+                  <label htmlFor="images" className="relative cursor-pointer bg-white rounded-md font-medium text-indigo-600 hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500">
                     <span>Upload files</span>
                     <input
                       id="images"
@@ -188,8 +207,8 @@ const EventManagement = () => {
           </div>
           <button
             type="submit"
-            className={`w-full bg-blue-500 text-white py-2 sm:py-3 px-4 rounded-md transition duration-150 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 ${
-              formLoading ? 'opacity-50 cursor-not-allowed' : 'hover:bg-blue-600'
+            className={`w-full bg-indigo-600 text-white py-2 sm:py-3 px-4 rounded-md transition duration-150 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 ${
+              formLoading ? 'opacity-50 cursor-not-allowed' : 'hover:bg-indigo-700'
             }`}
             disabled={formLoading}
           >
@@ -197,8 +216,8 @@ const EventManagement = () => {
           </button>
         </form>
       </div>
-      <div className="w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 bg-gradient-to-br from-blue-100 via-blue-200 to-blue-300">
-        <h2 className="text-3xl font-extrabold text-blue-800 mb-6">Event List</h2>
+      <div className="w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 bg-gradient-to-br from-indigo-600 via-indigo-700 to-indigo-800">
+        <h2 className="text-3xl font-extrabold text-white mb-6">Event List</h2>
         {loading ? (
           <div className="flex justify-center items-center h-48">
             <BouncingDotsLoader />
@@ -217,9 +236,9 @@ const EventManagement = () => {
                   </div>
                 )}
                 <div className="p-6">
-                  <h3 className="text-xl font-semibold text-blue-800 mb-2">{event.name}</h3>
-                  <p className="text-blue-700 text-sm mb-2 line-clamp-2">{event.description}</p>
-                  <p className="text-blue-600 text-sm font-medium">{event.date}</p>
+                  <h3 className="text-xl font-semibold text-indigo-800 mb-2">{event.name}</h3>
+                  <p className="text-indigo-700 text-sm mb-2 line-clamp-2">{event.description}</p>
+                  <p className="text-indigo-600 text-sm font-medium">{event.date}</p>
                 </div>
                 <button
                   type="button"
@@ -236,7 +255,7 @@ const EventManagement = () => {
             ))}
           </div>
         )}
-        <EventDetailsModal event={selectedEvent} open={modalOpen} onClose={handleCloseModal} />
+        <EventDetailsModal event={selectedEvent} open={modalOpen} onClose={handleCloseModal} onSave={handleSaveEvent} />
       </div>
       <ConfirmationDialog
         isOpen={confirmationDialogOpen}

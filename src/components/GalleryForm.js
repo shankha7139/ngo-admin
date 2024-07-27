@@ -35,14 +35,9 @@ const GalleryForm = () => {
   const handleDeleteGalleryImage = async (image) => {
     setLoading(true);
     try {
-      // Delete image from storage
       const storageRef = ref(storage, image.url);
       await deleteObject(storageRef);
-
-      // Delete image document from Firestore
       await deleteDoc(doc(db, 'gallery', image.id));
-
-      // Update the gallery images state
       setGalleryImages(galleryImages.filter(img => img.id !== image.id));
     } catch (error) {
       console.error("Error deleting gallery image: ", error);
@@ -79,11 +74,11 @@ const GalleryForm = () => {
   }, []);
 
   return (
-    <div className="min-h-screen w-full bg-gradient-to-br from-blue-100 via-blue-200 to-blue-300 py-8 px-4 sm:px-6 lg:px-8 flex items-center justify-center">
+    <div className="min-h-screen w-full bg-gradient-to-br from-indigo-600 via-indigo-700 to-indigo-800 py-8 px-4 sm:px-6 lg:px-8 flex items-center justify-center">
       <div className="w-full max-w-4xl bg-white rounded-xl shadow-2xl overflow-hidden">
-        <div className="px-6 py-4 sm:px-8 sm:py-6 bg-blue-500 text-white">
+        <div className="px-6 py-4 sm:px-8 sm:py-6 bg-indigo-800 text-white">
           <h2 className="text-2xl sm:text-3xl font-extrabold">Upload Gallery Images</h2>
-          <p className="mt-2 text-sm sm:text-base text-blue-100">Add new images to your gallery!</p>
+          <p className="mt-2 text-sm sm:text-base text-indigo-200">Add new images to your gallery!</p>
         </div>
         <form onSubmit={handleSubmit} className="px-6 py-4 sm:px-8 sm:py-6 space-y-4 sm:space-y-6">
           <div>
@@ -92,7 +87,7 @@ const GalleryForm = () => {
               <div className="space-y-1 text-center">
                 <ImageIcon className="mx-auto h-12 w-12 text-gray-400" />
                 <div className="flex text-sm text-gray-600">
-                  <label htmlFor="images" className="relative cursor-pointer bg-white rounded-md font-medium text-blue-600 hover:text-blue-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-blue-500">
+                  <label htmlFor="images" className="relative cursor-pointer bg-white rounded-md font-medium text-indigo-600 hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500">
                     <span>Upload files</span>
                     <input
                       id="images"
@@ -124,7 +119,7 @@ const GalleryForm = () => {
           </div>
           <button
             type="submit"
-            className="w-full bg-blue-500 text-white py-2 sm:py-3 px-4 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition duration-150 ease-in-out transform hover:scale-105"
+            className="w-full bg-indigo-600 text-white py-2 sm:py-3 px-4 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition duration-150 ease-in-out transform hover:scale-105"
             disabled={uploading}
           >
             {uploading ? <BouncingDotsLoader /> : 'Upload to Gallery'}
