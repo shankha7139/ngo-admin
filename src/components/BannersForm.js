@@ -1,15 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import { db, storage } from '../firebase';
-import { collection, addDoc, getDocs } from 'firebase/firestore';
-import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+import { collection, addDoc, getDocs, deleteDoc, doc } from 'firebase/firestore';
+import { ref, uploadBytes, getDownloadURL, deleteObject } from 'firebase/storage';
 import { TrashIcon, ImageIcon } from 'lucide-react';
-import { ClipLoader } from 'react-spinners';
+import BouncingDotsLoader from './BouncingDotsLoader';
+import ConfirmationDialog from './ConfirmationDialog';
 
 const BannersForm = () => {
   const [images, setImages] = useState([]);
   const [imagePreviews, setImagePreviews] = useState([]);
   const [bannerImages, setBannerImages] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [confirmationDialogOpen, setConfirmationDialogOpen] = useState(false);
+  const [deletingImage, setDeletingImage] = useState(null);
 
   const handleImageUpload = async (file) => {
     const storageRef = ref(storage, `banners/${file.name}`);
@@ -26,6 +29,26 @@ const BannersForm = () => {
   const handleDeleteImage = (index) => {
     setImages(prevImages => prevImages.filter((_, i) => i !== index));
     setImagePreviews(prevPreviews => prevPreviews.filter((_, i) => i !== index));
+  };
+
+  const handleDeleteBannerImage = async (image) => {
+    setLoading(true);
+    try {
+      // Delete image from storage
+      const storageRef = ref(storage, image.url);
+      await deleteObject(storageRef);
+
+      // Delete image document from Firestore
+      await deleteDoc(doc(db, 'banners', image.id));
+
+      // Update the banner images state
+      setBannerImages(bannerImages.filter(img => img.id !== image.id));
+    } catch (error) {
+      console.error("Error deleting banner image: ", error);
+    } finally {
+      setLoading(false);
+      setDeletingImage(null);
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -102,19 +125,37 @@ const BannersForm = () => {
           <h3 className="text-xl font-bold mb-4 text-gray-800">Current Banner Images</h3>
           {loading ? (
             <div className="flex justify-center items-center h-48">
-              <ClipLoader color="#FFD700" size={50} />
+              <BouncingDotsLoader />
             </div>
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
               {bannerImages.map((image) => (
-                <div key={image.id} className="bg-white rounded-lg shadow-md overflow-hidden">
+                <div key={image.id} className="relative bg-white rounded-lg shadow-md overflow-hidden">
                   <img src={image.url} alt="Banner Image" className="h-40 w-full object-cover" />
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setDeletingImage(image);
+                      setConfirmationDialogOpen(true);
+                    }}
+                    className="absolute top-2 right-2 p-1 bg-red-500 text-white rounded-full transition-opacity duration-200 hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
+                  >
+                    <TrashIcon className="w-4 h-4" />
+                  </button>
                 </div>
               ))}
             </div>
           )}
         </div>
       </div>
+      <ConfirmationDialog
+        isOpen={confirmationDialogOpen}
+        onClose={() => setConfirmationDialogOpen(false)}
+        onConfirm={() => {
+          setConfirmationDialogOpen(false);
+          handleDeleteBannerImage(deletingImage);
+        }}
+      />
     </div>
   );
 };

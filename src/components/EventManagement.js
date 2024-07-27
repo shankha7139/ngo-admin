@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { db, storage } from '../firebase';
-import { collection, addDoc, getDocs } from 'firebase/firestore';
-import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+import { collection, addDoc, getDocs, deleteDoc, doc } from 'firebase/firestore';
+import { ref, uploadBytes, getDownloadURL, deleteObject } from 'firebase/storage';
 import { TrashIcon, CalendarIcon, ImageIcon } from 'lucide-react';
-import { ClipLoader } from 'react-spinners';
+import BouncingDotsLoader from './BouncingDotsLoader';
 import EventDetailsModal from './EventDetailsModal';
+import ConfirmationDialog from './ConfirmationDialog';
 
 const EventManagement = () => {
   const [events, setEvents] = useState([]);
@@ -14,8 +15,11 @@ const EventManagement = () => {
   const [images, setImages] = useState([]);
   const [imagePreviews, setImagePreviews] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [formLoading, setFormLoading] = useState(false);
   const [selectedEvent, setSelectedEvent] = useState(null);
   const [modalOpen, setModalOpen] = useState(false);
+  const [confirmationDialogOpen, setConfirmationDialogOpen] = useState(false);
+  const [deletingEvent, setDeletingEvent] = useState(null);
 
   const handleImageUpload = async (file) => {
     const storageRef = ref(storage, `events/${file.name}`);
@@ -34,8 +38,31 @@ const EventManagement = () => {
     setImagePreviews(prevPreviews => prevPreviews.filter((_, i) => i !== index));
   };
 
+  const handleDeleteEvent = async (event) => {
+    setLoading(true);
+    try {
+      // Delete event images from storage
+      await Promise.all(event.images.map(async (url) => {
+        const storageRef = ref(storage, url);
+        await deleteObject(storageRef);
+      }));
+
+      // Delete event document from Firestore
+      await deleteDoc(doc(db, 'events', event.id));
+
+      // Update the events state
+      setEvents(events.filter(e => e.id !== event.id));
+    } catch (error) {
+      console.error("Error deleting event: ", error);
+    } finally {
+      setLoading(false);
+      setDeletingEvent(null);
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setFormLoading(true);
     const imageUrls = await Promise.all(images.map(image => handleImageUpload(image)));
     await addDoc(collection(db, 'events'), {
       name,
@@ -48,6 +75,7 @@ const EventManagement = () => {
     setDate('');
     setImages([]);
     setImagePreviews([]);
+    setFormLoading(false);
     fetchEvents();
   };
 
@@ -78,7 +106,12 @@ const EventManagement = () => {
           <h2 className="text-2xl sm:text-3xl font-extrabold">Create New Event</h2>
           <p className="mt-2 text-sm sm:text-base text-blue-100">Fill in the details to create your amazing event!</p>
         </div>
-        <form onSubmit={handleSubmit} className="px-6 py-4 sm:px-8 sm:py-6 space-y-4 sm:space-y-6">
+        <form onSubmit={handleSubmit} className="relative px-6 py-4 sm:px-8 sm:py-6 space-y-4 sm:space-y-6">
+          {formLoading && (
+            <div className="absolute inset-0 bg-white bg-opacity-75 flex justify-center items-center">
+              <BouncingDotsLoader />
+            </div>
+          )}
           <div>
             <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">Event Name</label>
             <input
@@ -155,7 +188,10 @@ const EventManagement = () => {
           </div>
           <button
             type="submit"
-            className="w-full bg-blue-500 text-white py-2 sm:py-3 px-4 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition duration-150 ease-in-out transform hover:scale-105"
+            className={`w-full bg-blue-500 text-white py-2 sm:py-3 px-4 rounded-md transition duration-150 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 ${
+              formLoading ? 'opacity-50 cursor-not-allowed' : 'hover:bg-blue-600'
+            }`}
+            disabled={formLoading}
           >
             Create Event
           </button>
@@ -165,12 +201,16 @@ const EventManagement = () => {
         <h2 className="text-3xl font-extrabold text-blue-800 mb-6">Event List</h2>
         {loading ? (
           <div className="flex justify-center items-center h-48">
-            <ClipLoader color="#FFD700" size={50} />
+            <BouncingDotsLoader />
           </div>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {events.map(event => (
-              <div key={event.id} className="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300 transform hover:scale-105 cursor-pointer" onClick={() => handleOpenModal(event)}>
+              <div 
+                key={event.id} 
+                className="relative bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300 transform hover:scale-105 cursor-pointer"
+                onClick={() => handleOpenModal(event)}
+              >
                 {event.images.length > 0 && (
                   <div className="h-48 w-full overflow-hidden">
                     <img src={event.images[0]} alt={event.name} className="w-full h-full object-cover" />
@@ -181,12 +221,31 @@ const EventManagement = () => {
                   <p className="text-blue-700 text-sm mb-2 line-clamp-2">{event.description}</p>
                   <p className="text-blue-600 text-sm font-medium">{event.date}</p>
                 </div>
+                <button
+                  type="button"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setDeletingEvent(event);
+                    setConfirmationDialogOpen(true);
+                  }}
+                  className="absolute top-2 right-2 p-1 bg-red-500 text-white rounded-full transition-opacity duration-200 hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
+                >
+                  <TrashIcon className="w-4 h-4" />
+                </button>
               </div>
             ))}
           </div>
         )}
         <EventDetailsModal event={selectedEvent} open={modalOpen} onClose={handleCloseModal} />
       </div>
+      <ConfirmationDialog
+        isOpen={confirmationDialogOpen}
+        onClose={() => setConfirmationDialogOpen(false)}
+        onConfirm={() => {
+          setConfirmationDialogOpen(false);
+          handleDeleteEvent(deletingEvent);
+        }}
+      />
     </div>
   );
 };

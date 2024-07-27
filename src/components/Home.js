@@ -1,13 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { ClipLoader } from 'react-spinners';
+import BouncingDotsLoader from './BouncingDotsLoader'; // Import the new loader
 
 const Home = ({ events, galleryImages, bannerImages }) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Simulate an async data fetching process
     const loadData = async () => {
-      // Simulate a delay
       await new Promise(resolve => setTimeout(resolve, 2000));
       setLoading(false);
     };
@@ -24,7 +22,7 @@ const Home = ({ events, galleryImages, bannerImages }) => {
       
       {loading ? (
         <div className="flex justify-center items-center h-48">
-          <ClipLoader color="#FFD700" size={50} />
+          <BouncingDotsLoader /> {/* Use the new loader */}
         </div>
       ) : (
         <>
