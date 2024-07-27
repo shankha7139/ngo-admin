@@ -1,3 +1,5 @@
+// tailwind.config.js
+
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   content: [
@@ -22,7 +24,8 @@ module.exports = {
       fontFamily: {
         'sans': ['Helvetica', 'Arial', 'sans-serif'],
         'serif': ['Times', 'Times New Roman', 'serif'],
-        'mono': ['Menlo', 'Monaco', 'Courier New', 'monospace']
+        'mono': ['Menlo', 'Monaco', 'Courier New', 'monospace'],
+        'roboto': ['Roboto', 'sans-serif'], // Add this line
       }
     },
   },

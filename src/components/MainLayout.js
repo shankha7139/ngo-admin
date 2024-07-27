@@ -1,11 +1,12 @@
+// src/components/MainLayout.js
 import React, { useState, useEffect, useCallback } from 'react';
+import { collection, getDocs } from 'firebase/firestore';
+import { db } from '../firebase';
 import Sidebar from './Sidebar';
-import EventManagement from './EventManagement';
 import Home from './Home';
+import EventManagement from './EventManagement';
 import GalleryForm from './GalleryForm';
 import BannersForm from './BannersForm';
-import { db } from '../firebase';
-import { collection, getDocs } from 'firebase/firestore';
 
 const MainLayout = () => {
   const [selectedTab, setSelectedTab] = useState('home');

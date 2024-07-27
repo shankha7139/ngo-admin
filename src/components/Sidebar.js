@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { signOut } from 'firebase/auth';
 import HomeIcon from '@mui/icons-material/Home';
 import EventIcon from '@mui/icons-material/Event';
 import PhotoLibraryIcon from '@mui/icons-material/PhotoLibrary';
@@ -6,9 +8,16 @@ import SettingsIcon from '@mui/icons-material/Settings';
 import InsertPhotoIcon from '@mui/icons-material/InsertPhoto';
 import MenuIcon from '@mui/icons-material/Menu';
 import CloseIcon from '@mui/icons-material/Close';
+import LockIcon from '@mui/icons-material/Lock';
+import PersonIcon from '@mui/icons-material/Person';
+import LogoLight from '../assets/Logo_light.png';
+import { auth } from '../firebase';
+import ConfirmationDialogLogout from './ConfirmationDialogLogout';
 
 const Sidebar = ({ onSelect, selectedTab }) => {
   const [isExpanded, setIsExpanded] = useState(false);
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const navigate = useNavigate();
 
   const toggleSidebar = () => {
     setIsExpanded(!isExpanded);
@@ -23,6 +32,24 @@ const Sidebar = ({ onSelect, selectedTab }) => {
     }
   };
 
+  const handleLogout = async () => {
+    await signOut(auth);
+    navigate('/login');
+  };
+
+  const openDialog = () => {
+    setDialogOpen(true);
+  };
+
+  const closeDialog = () => {
+    setDialogOpen(false);
+  };
+
+  const confirmLogout = () => {
+    handleLogout();
+    closeDialog();
+  };
+
   const menuItems = [
     { name: 'home', icon: HomeIcon },
     { name: 'events', icon: EventIcon },
@@ -34,9 +61,12 @@ const Sidebar = ({ onSelect, selectedTab }) => {
   return (
     <div className={`fixed inset-y-0 left-0 z-50 transition-all duration-300 bg-gradient-to-br from-indigo-600 via-indigo-700 to-indigo-800 shadow-xl ${isExpanded ? 'w-64' : 'w-20'} md:w-64`}>
       <div className="flex items-center justify-between h-16 bg-indigo-800 text-white px-4">
-        <h2 className={`text-xl font-bold ${isExpanded ? 'block' : 'hidden md:block'}`}>
-          Admin Panel
-        </h2>
+        <div className="flex items-center">
+          <PersonIcon className={`mr-2 ${isExpanded ? 'inline-block' : 'hidden'} md:inline-block`} />
+          <h2 className={`text-xl font-bold font-roboto ${isExpanded ? 'inline-block' : 'hidden'} md:inline-block`}>
+            Admin Panel
+          </h2>
+        </div>
         <button className="md:hidden text-white hover:text-indigo-200 transition-colors" onClick={toggleSidebar}>
           {isExpanded ? <CloseIcon /> : <MenuIcon />}
         </button>
@@ -54,16 +84,31 @@ const Sidebar = ({ onSelect, selectedTab }) => {
           >
             <div className="flex items-center w-full">
               <item.icon className="mr-3 flex-shrink-0" />
-              <span className={`${isExpanded ? 'block' : 'hidden md:block'} text-left font-medium`}>
+              <span className={`${isExpanded ? 'inline-block' : 'hidden'} md:inline-block text-left font-medium`}>
                 {item.name.charAt(0).toUpperCase() + item.name.slice(1)}
               </span>
             </div>
           </button>
         ))}
       </nav>
-      <div className={`absolute bottom-4 left-0 right-0 text-center text-indigo-200 text-sm ${isExpanded ? 'block' : 'hidden md:block'}`}>
-        Version 1.0.1
+      <div className={`absolute bottom-16 left-0 right-0 text-center`}>
+        <img src={LogoLight} alt="Logo" className={`h-16 mx-auto my-4 ${isExpanded ? 'block' : 'hidden'} md:block`} />
+        <div className={`text-indigo-200 text-sm mt-4 ${isExpanded ? 'block' : 'hidden'} md:block`}>
+          Version 1.0.1
+        </div>
+        <button
+          onClick={openDialog}
+          className="w-full flex items-center justify-center py-3 px-4 mt-4 rounded-lg text-indigo-100 hover:bg-red-600 hover:text-white transition-all duration-200"
+        >
+          <div className="flex items-center">
+            <LockIcon className="mr-3 flex-shrink-0" />
+            <span className={`${isExpanded ? 'inline-block' : 'hidden'} md:inline-block text-left font-medium`}>
+              Logout
+            </span>
+          </div>
+        </button>
       </div>
+      <ConfirmationDialogLogout open={dialogOpen} onClose={closeDialog} onConfirm={confirmLogout} />
     </div>
   );
 };
