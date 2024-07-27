@@ -1,53 +1,66 @@
-// src/components/Sidebar.js
 import React, { useState } from 'react';
-import { List, ListItem, Divider, Toolbar, Typography, IconButton } from '@mui/material';
 import HomeIcon from '@mui/icons-material/Home';
 import EventIcon from '@mui/icons-material/Event';
 import PhotoLibraryIcon from '@mui/icons-material/PhotoLibrary';
 import SettingsIcon from '@mui/icons-material/Settings';
 import InsertPhotoIcon from '@mui/icons-material/InsertPhoto';
 import MenuIcon from '@mui/icons-material/Menu';
+import CloseIcon from '@mui/icons-material/Close';
 
-const Sidebar = ({ onSelect }) => {
+const Sidebar = ({ onSelect, selectedTab }) => {
   const [isExpanded, setIsExpanded] = useState(false);
 
   const toggleSidebar = () => {
     setIsExpanded(!isExpanded);
   };
 
+  const handleSelect = (view) => {
+    onSelect(view);
+    if (!isExpanded) return;
+    const isMobile = window.innerWidth < 768;
+    if (isMobile) {
+      setIsExpanded(false);
+    }
+  };
+
+  const menuItems = [
+    { name: 'home', icon: HomeIcon },
+    { name: 'events', icon: EventIcon },
+    { name: 'gallery', icon: PhotoLibraryIcon },
+    { name: 'banners', icon: InsertPhotoIcon },
+    { name: 'settings', icon: SettingsIcon },
+  ];
+
   return (
-    <div className={`fixed inset-y-0 left-0 z-50 transition-transform transform bg-white shadow-md ${isExpanded ? 'w-60' : 'w-16'} md:w-60`}>
-      <Toolbar className="flex items-center justify-between h-16 bg-gray-800 text-white">
-        <Typography variant="h6" noWrap className={`${isExpanded ? 'block' : 'hidden md:block'}`}>
+    <div className={`fixed inset-y-0 left-0 z-50 transition-all bg-gradient-to-br from-blue-100 via-blue-200 to-blue-300 shadow-md ${isExpanded ? 'w-60' : 'w-16'} md:w-60`}>
+      <div className="flex items-center justify-between h-16 bg-blue-400 text-blue-800 px-4">
+        <h2 className={`text-xl font-bold ${isExpanded ? 'block' : 'hidden md:block'}`}>
           Admin Panel
-        </Typography>
-        <IconButton className="md:hidden" onClick={toggleSidebar}>
-          <MenuIcon />
-        </IconButton>
-      </Toolbar>
-      <Divider />
-      <List className="p-2">
-        <ListItem button onClick={() => { onSelect('home'); if (!isExpanded) toggleSidebar(); }} className="flex items-center p-2 hover:bg-gray-200 cursor-pointer">
-          <HomeIcon className="mr-3" />
-          <span className={`${isExpanded ? 'block' : 'hidden md:block'}`}>Home</span>
-        </ListItem>
-        <ListItem button onClick={() => { onSelect('events'); if (!isExpanded) toggleSidebar(); }} className="flex items-center p-2 hover:bg-gray-200 cursor-pointer">
-          <EventIcon className="mr-3" />
-          <span className={`${isExpanded ? 'block' : 'hidden md:block'}`}>Events</span>
-        </ListItem>
-        <ListItem button onClick={() => { onSelect('gallery'); if (!isExpanded) toggleSidebar(); }} className="flex items-center p-2 hover:bg-gray-200 cursor-pointer">
-          <PhotoLibraryIcon className="mr-3" />
-          <span className={`${isExpanded ? 'block' : 'hidden md:block'}`}>Gallery</span>
-        </ListItem>
-        <ListItem button onClick={() => { onSelect('banners'); if (!isExpanded) toggleSidebar(); }} className="flex items-center p-2 hover:bg-gray-200 cursor-pointer">
-          <InsertPhotoIcon className="mr-3" />
-          <span className={`${isExpanded ? 'block' : 'hidden md:block'}`}>Banners</span>
-        </ListItem>
-        <ListItem button onClick={() => { onSelect('settings'); if (!isExpanded) toggleSidebar(); }} className="flex items-center p-2 hover:bg-gray-200 cursor-pointer">
-          <SettingsIcon className="mr-3" />
-          <span className={`${isExpanded ? 'block' : 'hidden md:block'}`}>Settings</span>
-        </ListItem>
-      </List>
+        </h2>
+        <button className="md:hidden text-blue-800" onClick={toggleSidebar}>
+          {isExpanded ? <CloseIcon /> : <MenuIcon />}
+        </button>
+      </div>
+      <nav className="mt-8">
+        {menuItems.map((item) => (
+          <button
+            key={item.name}
+            onClick={() => handleSelect(item.name)}
+            className={`w-full flex items-center py-3 px-4 transition-colors duration-200 ${
+              selectedTab === item.name
+                ? 'bg-blue-400 text-blue-800'
+                : 'text-blue-800 hover:bg-blue-200'
+            }`}
+          >
+            <div className="flex items-center w-full">
+              <item.icon className="mr-3 flex-shrink-0" />
+              <span className={`${isExpanded ? 'block' : 'hidden md:block'} text-left`}>
+                {item.name.charAt(0).toUpperCase() + item.name.slice(1)}
+              </span>
+            </div>
+          </button>
+        ))}
+      </nav>
     </div>
   );
 };
