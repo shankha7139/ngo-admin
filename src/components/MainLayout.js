@@ -53,11 +53,11 @@ const MainLayout = () => {
   };
 
   return (
-    <div className="flex bg-gradient-to-br from-indigo-600 via-indigo-700 to-indigo-800 min-h-screen">
+    <div className="flex bg-gray-100 min-h-screen">
       <Sidebar onSelect={setSelectedTab} selectedTab={selectedTab} />
       <div className="flex-grow ml-20 md:ml-64 p-4 md:p-8 transition-all">
         <div className="max-w-7xl mx-auto">
-          <h1 className="text-3xl font-extrabold text-white mb-6">
+          <h1 className="text-3xl font-extrabold text-indigo-500 mb-6">
             {selectedTab.charAt(0).toUpperCase() + selectedTab.slice(1)}
           </h1>
           {renderContent()}

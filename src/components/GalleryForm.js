@@ -74,20 +74,35 @@ const GalleryForm = () => {
   }, []);
 
   return (
-    <div className="min-h-screen w-full bg-gradient-to-br from-indigo-600 via-indigo-700 to-indigo-800 py-8 px-4 sm:px-6 lg:px-8 flex items-center justify-center">
+    <div className="min-h-screen rounded-xl w-full bg-gradient-to-br from-orange-200 to-indigo-100 py-8 px-4 sm:px-6 lg:px-8 flex items-center justify-center">
       <div className="w-full max-w-4xl bg-white rounded-xl shadow-2xl overflow-hidden">
         <div className="px-6 py-4 sm:px-8 sm:py-6 bg-indigo-800 text-white">
-          <h2 className="text-2xl sm:text-3xl font-extrabold">Upload Gallery Images</h2>
-          <p className="mt-2 text-sm sm:text-base text-indigo-200">Add new images to your gallery!</p>
+          <h2 className="text-2xl sm:text-3xl font-extrabold">
+            Upload Gallery Images
+          </h2>
+          <p className="mt-2 text-sm sm:text-base text-indigo-200">
+            Add new images to your gallery!
+          </p>
         </div>
-        <form onSubmit={handleSubmit} className="px-6 py-4 sm:px-8 sm:py-6 space-y-4 sm:space-y-6">
+        <form
+          onSubmit={handleSubmit}
+          className="px-6 py-4 sm:px-8 sm:py-6 space-y-4 sm:space-y-6"
+        >
           <div>
-            <label htmlFor="images" className="block text-sm font-medium text-gray-700 mb-1">Upload Images</label>
+            <label
+              htmlFor="images"
+              className="block text-sm font-medium text-gray-700 mb-1"
+            >
+              Upload Images
+            </label>
             <div className="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md">
               <div className="space-y-1 text-center">
                 <ImageIcon className="mx-auto h-12 w-12 text-gray-400" />
                 <div className="flex text-sm text-gray-600">
-                  <label htmlFor="images" className="relative cursor-pointer bg-white rounded-md font-medium text-indigo-600 hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500">
+                  <label
+                    htmlFor="images"
+                    className="relative cursor-pointer bg-white rounded-md font-medium text-indigo-600 hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500"
+                  >
                     <span>Upload files</span>
                     <input
                       id="images"
@@ -99,14 +114,20 @@ const GalleryForm = () => {
                   </label>
                   <p className="pl-1">or drag and drop</p>
                 </div>
-                <p className="text-xs text-gray-500">PNG, JPG, GIF up to 10MB</p>
+                <p className="text-xs text-gray-500">
+                  PNG, JPG, GIF up to 10MB
+                </p>
               </div>
             </div>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {imagePreviews.map((src, index) => (
               <div key={index} className="relative group">
-                <img src={src} alt={`preview ${index}`} className="w-full h-32 sm:h-40 object-cover rounded-md" />
+                <img
+                  src={src}
+                  alt={`preview ${index}`}
+                  className="w-full h-32 sm:h-40 object-cover rounded-md"
+                />
                 <button
                   type="button"
                   onClick={() => handleDeleteImage(index)}
@@ -122,11 +143,13 @@ const GalleryForm = () => {
             className="w-full bg-indigo-600 text-white py-2 sm:py-3 px-4 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition duration-150 ease-in-out transform hover:scale-105"
             disabled={uploading}
           >
-            {uploading ? <BouncingDotsLoader /> : 'Upload to Gallery'}
+            {uploading ? <BouncingDotsLoader /> : "Upload to Gallery"}
           </button>
         </form>
         <div className="px-6 py-4 sm:px-8 sm:py-6 bg-gray-50">
-          <h3 className="text-xl font-bold mb-4 text-gray-800">Current Gallery Images</h3>
+          <h3 className="text-xl font-bold mb-4 text-gray-800">
+            Current Gallery Images
+          </h3>
           {loading ? (
             <div className="flex justify-center items-center h-48">
               <BouncingDotsLoader />
@@ -134,8 +157,15 @@ const GalleryForm = () => {
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
               {galleryImages.map((image) => (
-                <div key={image.id} className="relative bg-white rounded-lg shadow-md overflow-hidden">
-                  <img src={image.url} alt="Gallery Image" className="h-40 w-full object-cover" />
+                <div
+                  key={image.id}
+                  className="relative bg-white rounded-lg shadow-md overflow-hidden"
+                >
+                  <img
+                    src={image.url}
+                    alt="Gallery Image"
+                    className="h-40 w-full object-cover"
+                  />
                   <button
                     type="button"
                     onClick={() => {
