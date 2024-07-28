@@ -74,7 +74,7 @@ const GalleryForm = () => {
   }, []);
 
   return (
-    <div className="min-h-screen rounded-xl w-full bg-gradient-to-br from-orange-200 to-indigo-100 py-8 px-4 sm:px-6 lg:px-8 flex items-center justify-center">
+    <div className="min-h-screen rounded-xl w-full shadow-xl bg-gradient-to-br from-[#fbdcec] to-indigo-100 py-8 px-4 sm:px-6 lg:px-8 flex items-center justify-center">
       <div className="w-full max-w-4xl bg-white rounded-xl shadow-2xl overflow-hidden">
         <div className="px-6 py-4 sm:px-8 sm:py-6 bg-indigo-800 text-white">
           <h2 className="text-2xl sm:text-3xl font-extrabold">

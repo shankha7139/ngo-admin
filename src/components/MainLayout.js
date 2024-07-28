@@ -53,7 +53,7 @@ const MainLayout = () => {
   };
 
   return (
-    <div className="flex bg-gray-100 min-h-screen">
+    <div className="flex bg-[#fbdcec] min-h-screen">
       <Sidebar onSelect={setSelectedTab} selectedTab={selectedTab} />
       <div className="flex-grow ml-20 md:ml-64 p-4 md:p-8 transition-all">
         <div className="max-w-7xl mx-auto">

@@ -16,7 +16,7 @@ const Home = ({ events, galleryImages, bannerImages }) => {
   }, []);
 
   return (
-    <div className="min-h-screen rounded-xl w-full bg-gradient-to-br from-orange-200 to-indigo-100 py-12 px-8 sm:px-6 lg:px-8 relative">
+    <div className="min-h-screen rounded-xl w-full shadow-xl bg-gradient-to-br from-[#fbdcec] to-indigo-100 py-12 px-8 sm:px-6 lg:px-8 relative">
       <button
         onClick={loadData}
         className="absolute top-1 right-4 py-1 px-3 m-4 sm:py-2 sm:px-4 bg-indigo-500 text-white rounded-full hover:bg-indigo-600 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:ring-opacity-50 text-sm sm:text-base"
