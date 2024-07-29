@@ -5,18 +5,22 @@ import {
   EmailAuthProvider,
   reauthenticateWithCredential,
 } from "firebase/auth";
+import { Lock, Key, AlertCircle, CheckCircle } from "lucide-react";
 
-const NeomorphicInput = ({ id, name, type, placeholder, value, onChange }) => (
-  <div className="mb-4">
+const NeomorphicInput = ({ id, name, type, placeholder, value, onChange, icon: Icon }) => (
+  <div className="mb-4 relative">
     <label htmlFor={id} className="sr-only">
       {placeholder}
     </label>
+    <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+      <Icon className="h-5 w-5 text-indigo-400" />
+    </div>
     <input
       id={id}
       name={name}
       type={type}
       required
-      className="appearance-none relative block w-full px-3 py-2 border-none text-white placeholder-indigo-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm bg-indigo-600 shadow-[inset_3px_3px_5px_#383b8b,inset_-3px_-3px_5px_#5f63f0]"
+      className="appearance-none block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm bg-white shadow-sm"
       placeholder={placeholder}
       value={value}
       onChange={onChange}
@@ -68,57 +72,71 @@ const Settings = () => {
   };
 
   return (
-    <div className="min-h-screen rounded-xl bg-gradient-to-br from-blue-200 to-indigo-600 flex items-center justify-center px-4 sm:px-6 lg:px-8">
-      <div className="max-w-md w-full space-y-8">
-        <div>
-          <h2 className="mt-6 text-center text-3xl font-extrabold text-white">
-            Change Password
-          </h2>
-        </div>
-        <form className="mt-8 space-y-6" onSubmit={handlePasswordChange}>
-          <div className="rounded-md shadow-sm">
-            <NeomorphicInput
-              id="current-password"
-              name="currentPassword"
-              type="password"
-              placeholder="Current Password"
-              value={currentPassword}
-              onChange={(e) => setCurrentPassword(e.target.value)}
-            />
-            <NeomorphicInput
-              id="new-password"
-              name="newPassword"
-              type="password"
-              placeholder="New Password"
-              value={newPassword}
-              onChange={(e) => setNewPassword(e.target.value)}
-            />
-            <NeomorphicInput
-              id="confirm-password"
-              name="confirmPassword"
-              type="password"
-              placeholder="Confirm New Password"
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
-            />
-          </div>
-
-          {error && (
-            <div className="text-red-300 text-sm text-center">{error}</div>
-          )}
-          {success && (
-            <div className="text-green-300 text-sm text-center">{success}</div>
-          )}
-
-          <div>
-            <button
-              type="submit"
-              className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 shadow-[3px_3px_5px_#383b8b,-3px_-3px_5px_#5f63f0] transition duration-300 ease-in-out hover:shadow-[inset_3px_3px_5px_#383b8b,inset_-3px_-3px_5px_#5f63f0]"
-            >
+    <div className="min-h-screen bg-gradient-to-br from-indigo-50 to-purple-100 py-12 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-md mx-auto">
+        <div className="bg-white rounded-xl shadow-xl overflow-hidden">
+          <div className="px-6 py-8 sm:px-10 sm:py-10 bg-gradient-to-r from-indigo-600 to-purple-600">
+            <h2 className="text-3xl font-extrabold text-center text-white">
               Change Password
-            </button>
+            </h2>
+            <p className="mt-2 text-center text-indigo-100">
+              Keep your account secure by updating your password frequently!
+            </p>
           </div>
-        </form>
+          <div className="px-6 py-8 sm:px-10 sm:py-10">
+            <form className="space-y-6" onSubmit={handlePasswordChange}>
+              <NeomorphicInput
+                id="current-password"
+                name="currentPassword"
+                type="password"
+                placeholder="Current Password"
+                value={currentPassword}
+                onChange={(e) => setCurrentPassword(e.target.value)}
+                icon={Lock}
+              />
+              <NeomorphicInput
+                id="new-password"
+                name="newPassword"
+                type="password"
+                placeholder="New Password"
+                value={newPassword}
+                onChange={(e) => setNewPassword(e.target.value)}
+                icon={Key}
+              />
+              <NeomorphicInput
+                id="confirm-password"
+                name="confirmPassword"
+                type="password"
+                placeholder="Confirm New Password"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                icon={Key}
+              />
+
+              {error && (
+                <div className="flex items-center text-red-600 text-sm">
+                  <AlertCircle className="h-5 w-5 mr-2" />
+                  <span>{error}</span>
+                </div>
+              )}
+              {success && (
+                <div className="flex items-center text-green-600 text-sm">
+                  <CheckCircle className="h-5 w-5 mr-2" />
+                  <span>{success}</span>
+                </div>
+              )}
+
+              <div>
+                <button
+                  type="submit"
+                  className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition duration-300 ease-in-out transform hover:-translate-y-1 hover:scale-105"
+                >
+                  Change Password
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
       </div>
     </div>
   );

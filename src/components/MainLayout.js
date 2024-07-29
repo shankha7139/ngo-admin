@@ -8,6 +8,7 @@ import GalleryForm from './GalleryForm';
 import BannersForm from './BannersForm';
 import MembersList from './MembersList';
 import Settings from "./Settings";
+import GFormLinksManager from './GFormLinksManager';
 
 const MainLayout = () => {
   const [selectedTab, setSelectedTab] = useState('home');
@@ -48,6 +49,8 @@ const MainLayout = () => {
         return <BannersForm />;
       case 'members':
         return <MembersList />;
+      case 'forms':
+        return <GFormLinksManager />;
       case 'settings':
         return <Settings />;
       default:
