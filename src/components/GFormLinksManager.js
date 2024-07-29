@@ -1,9 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import { collection, getDocs, addDoc, deleteDoc, doc, updateDoc } from 'firebase/firestore';
 import { db } from '../firebase';
-import { Search, Trash2, Edit2, Plus, Link as LinkIcon, X } from 'lucide-react';
+import {
+  Search,
+  Trash2,
+  Edit2,
+  Plus,
+  LinkIcon,
+  ExternalLink,
+  Calendar,
+  Clock,
+} from "lucide-react";
 import ConfirmationDialog from './ConfirmationDialog';
 import BouncingDotsLoader from './BouncingDotsLoader';
+import { motion } from "framer-motion";
 
 const Button = ({ children, onClick, className, ...props }) => (
   <button
@@ -31,6 +41,84 @@ const Card = ({ children, className, ...props }) => (
   </div>
 );
 
+const EventCard = ({ link, onEdit, onDelete }) => {
+  return (
+    <motion.div
+      whileHover={{ scale: 1.03 }}
+      whileTap={{ scale: 0.98 }}
+      transition={{ type: "spring", stiffness: 300, damping: 10 }}
+      className="bg-blue-200 rounded-xl shadow-lg overflow-hidden transition-all duration-300 hover:shadow-2xl"
+    >
+      <div className="p-6 space-y-4 relative">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+        >
+          <h3 className="font-bold text-2xl text-blue-800 mb-2">
+            {link.eventName}
+          </h3>
+          <div className="flex items-center text-sm text-blue-700 mb-4">
+            <Calendar size={16} className="mr-2" />
+            <span>Event Date: Coming Soon</span>
+          </div>
+          <div className="flex items-center text-sm text-blue-700 mb-4">
+            <Clock size={16} className="mr-2" />
+            <span>Duration: TBA</span>
+          </div>
+          <div className="flex items-center text-sm text-blue-700 mb-4">
+            <LinkIcon size={16} className="mr-2" />
+            <a
+              href={link.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-blue-700 hover:text-blue-900 hover:underline truncate flex items-center"
+            >
+              {link.url}
+              <ExternalLink size={14} className="ml-1" />
+            </a>
+          </div>
+        </motion.div>
+
+        <motion.div
+          className="flex justify-between items-center"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.2, duration: 0.5 }}
+        >
+          <motion.button
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.9 }}
+            className="px-4 py-2 bg-blue-500 text-white rounded-full text-sm font-medium hover:bg-blue-600 transition-colors duration-300"
+            onClick={() => window.open(link.url, "_blank")}
+          >
+            Open Form
+          </motion.button>
+
+          <div className="space-x-2">
+            <motion.button
+              whileHover={{ scale: 1.1, rotate: 15 }}
+              whileTap={{ scale: 0.9 }}
+              className="p-2 bg-red-500 text-white hover:bg-red-600 rounded-full transition-colors duration-300"
+              onClick={() => onDelete(link)}
+            >
+              <Trash2 size={16} />
+            </motion.button>
+            <motion.button
+              whileHover={{ scale: 1.1, rotate: -15 }}
+              whileTap={{ scale: 0.9 }}
+              className="p-2 bg-blue-500 text-white hover:bg-blue-600 rounded-full transition-colors duration-300"
+              onClick={() => onEdit(link)}
+            >
+              <Edit2 size={16} />
+            </motion.button>
+          </div>
+        </motion.div>
+      </div>
+    </motion.div>
+  );
+};
+
 const GFormLinksManager = () => {
   const [gformLinks, setGformLinks] = useState([]);
   const [filteredGformLinks, setFilteredGformLinks] = useState([]);
@@ -41,7 +129,6 @@ const GFormLinksManager = () => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [linkToDelete, setLinkToDelete] = useState(null);
   const [editingLink, setEditingLink] = useState(null);
-
 
   const fetchGFormLinks = async () => {
     try {
@@ -137,13 +224,15 @@ const GFormLinksManager = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-10 py-12 px-4 sm:px-6 lg:px-8 rounded-xl">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
         <Card className="overflow-hidden shadow-2xl">
           <div className="px-6 py-8 sm:px-10 sm:py-12 bg-gradient-to-r from-blue-600 to-indigo-600">
             <div className="flex flex-col sm:flex-row justify-between items-center">
               <div className="mb-6 sm:mb-0">
-                <h2 className="text-4xl font-extrabold text-white tracking-tight">Events Forms Manager</h2>
+                <h2 className="text-4xl font-extrabold text-white tracking-tight">
+                  Events Forms Manager
+                </h2>
                 <p className="mt-2 text-blue-100 text-lg">
                   Streamline your form management process
                 </p>
@@ -194,64 +283,12 @@ const GFormLinksManager = () => {
             ) : (
               <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
                 {filteredGformLinks.map((link) => (
-                  <Card key={link.id} className="group">
-                    <div className="p-6 space-y-3 relative">
-                      {editingLink && editingLink.id === link.id ? (
-                        <div className="space-y-3">
-                          <Input
-                            type="text"
-                            value={editingLink.eventName}
-                            onChange={(e) => setEditingLink({ ...editingLink, eventName: e.target.value })}
-                            className="w-full mb-2"
-                          />
-                          <Input
-                            type="text"
-                            value={editingLink.url}
-                            onChange={(e) => setEditingLink({ ...editingLink, url: e.target.value })}
-                            className="w-full mb-2"
-                          />
-                          <div className="flex space-x-2">
-                            <Button
-                              onClick={handleEditSave}
-                              className="w-full bg-green-500 text-white hover:bg-green-600"
-                            >
-                              Save
-                            </Button>
-                            <Button
-                              onClick={handleEditCancel}
-                              className="w-full bg-gray-300 text-gray-800 hover:bg-gray-400"
-                            >
-                              Cancel
-                            </Button>
-                          </div>
-                        </div>
-                      ) : (
-                        <>
-                          <div className="absolute top-2 right-2 space-x-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                            <Button
-                              className="p-2 bg-red-500 text-white hover:bg-red-600 rounded-full"
-                              onClick={() => handleDeleteClick(link)}
-                            >
-                              <Trash2 size={16} />
-                            </Button>
-                            <Button
-                              className="p-2 bg-blue-500 text-white hover:bg-blue-600 rounded-full"
-                              onClick={() => handleEditClick(link)}
-                            >
-                              <Edit2 size={16} />
-                            </Button>
-                          </div>
-                          <h3 className="font-semibold text-xl text-indigo-700">{link.eventName}</h3>
-                          <div className="flex items-center text-sm text-gray-600">
-                            <LinkIcon size={16} className="mr-2 text-indigo-500" />
-                            <a href={link.url} target="_blank" rel="noopener noreferrer" className="text-indigo-500 hover:underline truncate">
-                              {link.url}
-                            </a>
-                          </div>
-                        </>
-                      )}
-                    </div>
-                  </Card>
+                  <EventCard
+                    key={link.id}
+                    link={link}
+                    onEdit={() => handleEditClick(link)}
+                    onDelete={() => handleDeleteClick(link)}
+                  />
                 ))}
               </div>
             )}
