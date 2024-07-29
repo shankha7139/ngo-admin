@@ -13,7 +13,7 @@ import {
 } from "lucide-react";
 import ConfirmationDialog from './ConfirmationDialog';
 import BouncingDotsLoader from './BouncingDotsLoader';
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 
 const Button = ({ children, onClick, className, ...props }) => (
   <button
@@ -346,61 +346,73 @@ const GFormLinksManager = () => {
         onClose={handleDialogClose}
         onConfirm={handleDeleteConfirm}
       />
-      {editingLink && (
-        <div className="fixed inset-0 bg-black bg-opacity-30 flex items-center justify-center p-4">
-          <Card className="p-4 w-full max-w-md">
-            <h2 className="text-xl font-bold mb-4">Edit Link</h2>
-            <div className="flex flex-col space-y-4">
-              <Input
-                id="editEventName"
-                label="Event Name"
-                type="text"
-                value={editingLink.eventName}
-                onChange={(e) => setEditingLink({ ...editingLink, eventName: e.target.value })}
-                className="text-sm"
-              />
-              <Input
-                id="editFormLink"
-                label="Google Form Link"
-                type="text"
-                value={editingLink.url}
-                onChange={(e) => setEditingLink({ ...editingLink, url: e.target.value })}
-                className="text-sm"
-              />
-              <Input
-                id="editEventDate"
-                label="Event Date"
-                type="date"
-                value={editingLink.eventDate}
-                onChange={(e) => setEditingLink({ ...editingLink, eventDate: e.target.value })}
-                className="text-sm"
-              />
-              <Input
-                id="editLastDayToRegister"
-                label="Last Day to Register"
-                type="date"
-                value={editingLink.lastDayToRegister}
-                onChange={(e) => setEditingLink({ ...editingLink, lastDayToRegister: e.target.value })}
-                className="text-sm"
-              />
-            </div>
-            <div className="flex justify-end space-x-4 mt-4">
-              <Button
-                onClick={handleEditSave}
-                className="bg-blue-500 text-white hover:bg-blue-600 text-sm"
-              >
-                Save
-              </Button>
-              <Button
-                onClick={handleEditCancel}
-                className="bg-gray-500 text-white hover:bg-gray-600 text-sm"
-              >
-                Cancel
-              </Button>
-            </div>
-          </Card>
-        </div>
-      )}
+      <AnimatePresence>
+        {editingLink && (
+          <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50"
+          >
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.9, opacity: 0 }}
+              className="bg-white rounded-xl shadow-2xl p-6 w-full max-w-md"
+            >
+              <h2 className="text-2xl font-bold mb-4">Edit Link</h2>
+              <div className="space-y-4">
+                <Input
+                  id="editEventName"
+                  label="Event Name"
+                  type="text"
+                  value={editingLink.eventName}
+                  onChange={(e) => setEditingLink({ ...editingLink, eventName: e.target.value })}
+                  className="text-sm"
+                />
+                <Input
+                  id="editFormLink"
+                  label="Google Form Link"
+                  type="text"
+                  value={editingLink.url}
+                  onChange={(e) => setEditingLink({ ...editingLink, url: e.target.value })}
+                  className="text-sm"
+                />
+                <Input
+                  id="editEventDate"
+                  label="Event Date"
+                  type="date"
+                  value={editingLink.eventDate}
+                  onChange={(e) => setEditingLink({ ...editingLink, eventDate: e.target.value })}
+                  className="text-sm"
+                />
+                <Input
+                  id="editLastDayToRegister"
+                  label="Last Day to Register"
+                  type="date"
+                  value={editingLink.lastDayToRegister}
+                  onChange={(e) => setEditingLink({ ...editingLink, lastDayToRegister: e.target.value })}
+                  className="text-sm"
+                />
+              </div>
+              <div className="flex justify-end space-x-4 mt-6">
+                <Button
+                  onClick={handleEditSave}
+                  className="bg-blue-500 text-white hover:bg-blue-600 text-sm"
+                >
+                  Save
+                </Button>
+                <Button
+                  onClick={handleEditCancel}
+                  className="bg-gray-500 text-white hover:bg-gray-600 text-sm"
+                >
+                  Cancel
+                </Button>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 };
