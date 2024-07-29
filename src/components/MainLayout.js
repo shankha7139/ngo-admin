@@ -7,6 +7,7 @@ import EventManagement from './EventManagement';
 import GalleryForm from './GalleryForm';
 import BannersForm from './BannersForm';
 import MembersList from './MembersList';
+import Settings from "./Settings";
 
 const MainLayout = () => {
   const [selectedTab, setSelectedTab] = useState('home');
@@ -48,7 +49,7 @@ const MainLayout = () => {
       case 'members':
         return <MembersList />;
       case 'settings':
-        return <div className="bg-white rounded-xl shadow-md p-6">Settings Content</div>;
+        return <Settings />;
       default:
         return null;
     }
