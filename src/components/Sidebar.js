@@ -10,6 +10,7 @@ import MenuIcon from '@mui/icons-material/Menu';
 import CloseIcon from '@mui/icons-material/Close';
 import LockIcon from '@mui/icons-material/Lock';
 import PersonIcon from '@mui/icons-material/Person';
+import Person3TwoTone from '@mui/icons-material/Person3TwoTone';
 import LogoLight from '../assets/Logo_light.png';
 import { auth } from '../firebase';
 import ConfirmationDialogLogout from './ConfirmationDialogLogout';
@@ -55,6 +56,7 @@ const Sidebar = ({ onSelect, selectedTab }) => {
     { name: 'events', icon: EventIcon },
     { name: 'gallery', icon: PhotoLibraryIcon },
     { name: 'banners', icon: InsertPhotoIcon },
+    { name: 'members', icon: Person3TwoTone },
     { name: 'settings', icon: SettingsIcon },
   ];
 

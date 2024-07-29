@@ -1,4 +1,3 @@
-// src/components/MainLayout.js
 import React, { useState, useEffect, useCallback } from 'react';
 import { collection, getDocs } from 'firebase/firestore';
 import { db } from '../firebase';
@@ -7,6 +6,7 @@ import Home from './Home';
 import EventManagement from './EventManagement';
 import GalleryForm from './GalleryForm';
 import BannersForm from './BannersForm';
+import MembersList from './MembersList';
 
 const MainLayout = () => {
   const [selectedTab, setSelectedTab] = useState('home');
@@ -45,6 +45,8 @@ const MainLayout = () => {
         return <GalleryForm />;
       case 'banners':
         return <BannersForm />;
+      case 'members':
+        return <MembersList />;
       case 'settings':
         return <div className="bg-white rounded-xl shadow-md p-6">Settings Content</div>;
       default:
