@@ -250,7 +250,7 @@ const GFormLinksManager = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 py-6 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 rounded-xl py-6 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
         <Card className="overflow-hidden shadow-2xl">
           <div className="px-4 py-6 sm:px-6 sm:py-8 bg-gradient-to-r from-blue-600 to-indigo-600">
