@@ -74,9 +74,9 @@ const BannersForm = () => {
   }, []);
 
   return (
-    <div className="min-h-screen w-full rounded-xl shadow-xl bg-gradient-to-br from-[#fbdcec] to-indigo-100 py-8 px-4 sm:px-6 lg:px-8 flex items-center justify-center">
+    <div className="min-h-screen w-full rounded-xl bg-gradient-to-br from-blue-50 to-indigo-10 py-8 px-4 sm:px-6 lg:px-8 flex items-center justify-center">
       <div className="w-full max-w-4xl bg-white rounded-xl shadow-2xl overflow-hidden">
-        <div className="px-6 py-4 sm:px-8 sm:py-6 bg-indigo-800 text-white">
+        <div className="px-6 py-4 sm:px-8 sm:py-6 bg-gradient-to-r from-blue-600 to-indigo-600 text-white">
           <h2 className="text-2xl sm:text-3xl font-extrabold">
             Upload Banner Images
           </h2>

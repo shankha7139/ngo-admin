@@ -119,9 +119,9 @@ const EventManagement = () => {
   };
 
   return (
-    <div className="min-h-screen rounded-xl w-full  shadow-xl bg-gradient-to-br from-[#fbdcec] to-indigo-100 py-8 px-4 sm:px-6 lg:px-8 flex flex-col items-center">
+    <div className="min-h-screen rounded-xl w-full bg-gradient-to-br from-blue-50 to-indigo-10 py-8 px-4 sm:px-6 lg:px-8 flex flex-col items-center">
       <div className="w-full max-w-4xl bg-white rounded-xl shadow-2xl overflow-hidden mb-8">
-        <div className="px-6 py-4 sm:px-8 sm:py-6 bg-indigo-600 text-white">
+        <div className="px-6 py-4 sm:px-8 sm:py-6 bg-gradient-to-r from-blue-600 to-indigo-600 text-white">
           <h2 className="text-2xl sm:text-3xl font-extrabold">
             Create New Event
           </h2>
@@ -254,7 +254,7 @@ const EventManagement = () => {
           </button>
         </form>
       </div>
-      <div className="w-full rounded-xl max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 bg-indigo-500">
+      <div className="w-full rounded-xl max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 bg-gradient-to-r from-blue-600 to-indigo-600">
         <h2 className="text-3xl font-extrabold text-orange-100 mb-6">
           Event List
         </h2>

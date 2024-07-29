@@ -137,7 +137,7 @@ const GFormLinksManager = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-10 py-12 px-4 sm:px-6 lg:px-8 rounded-xl">
       <div className="max-w-7xl mx-auto">
         <Card className="overflow-hidden shadow-2xl">
           <div className="px-6 py-8 sm:px-10 sm:py-12 bg-gradient-to-r from-blue-600 to-indigo-600">
@@ -155,9 +155,9 @@ const GFormLinksManager = () => {
                     placeholder="Search links or events..."
                     value={searchTerm}
                     onChange={handleSearch}
-                    className="pl-10 pr-4 py-3 w-full sm:w-72 bg-white bg-opacity-20 text-white placeholder-blue-200 border-none"
+                    className="pl-10 pr-4 py-3 w-full sm:w-72 bg-white bg-opacity-90 text-blue-600 placeholder-gray-400 border-none"
                   />
-                  <Search className="absolute left-3 top-3 h-5 w-5 text-blue-200" />
+                  <Search className="absolute left-3 top-3 h-5 w-5 text-blue-600" />
                 </div>
               </div>
             </div>

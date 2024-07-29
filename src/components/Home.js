@@ -16,18 +16,18 @@ const Home = ({ events, galleryImages, bannerImages }) => {
   }, []);
 
   return (
-    <div className="min-h-screen rounded-xl w-full shadow-xl bg-gradient-to-br from-[#fbdcec] to-indigo-100 py-12 px-8 sm:px-6 lg:px-8 relative">
+    <div className="min-h-screen rounded-xl w-full shadow-xl bg-gradient-to-r from-indigo-600 to-blue-500 py-12 px-8 sm:px-6 lg:px-8 relative">
       <button
         onClick={loadData}
-        className="absolute top-1 right-4 py-1 px-3 m-4 sm:py-2 sm:px-4 bg-indigo-500 text-white rounded-full hover:bg-indigo-600 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:ring-opacity-50 text-sm sm:text-base"
+        className="absolute top-1 right-4 py-1 px-3 m-4 sm:py-2 sm:px-4 bg-blue-700 text-white rounded-full hover:bg-indigo-600 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:ring-opacity-50 text-sm sm:text-base"
       >
         Refresh
       </button>
 
-      <h1 className="text-4xl sm:text-5xl font-extrabold text-indigo-500 mb-6">
+      <h1 className="text-4xl sm:text-5xl font-extrabold text-indigo-200 mb-6">
         Welcome, Sir!
       </h1>
-      <p className="text-lg sm:text-xl text-indigo-500 mb-10">
+      <p className="text-lg sm:text-xl text-indigo-100 mb-10">
         This is your admin panel. Use the tabs on the left to manage events,
         gallery, banners, and settings.
       </p>
@@ -39,7 +39,7 @@ const Home = ({ events, galleryImages, bannerImages }) => {
       ) : (
         <>
           <section className="mb-10">
-            <h2 className="text-3xl sm:text-4xl font-extrabold text-indigo-600 mb-6">
+            <h2 className="text-3xl sm:text-4xl font-extrabold text-indigo-200 mb-6">
               Events
             </h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -74,7 +74,7 @@ const Home = ({ events, galleryImages, bannerImages }) => {
           <div className="border-t border-indigo-400 my-10"></div>
 
           <section className="mb-10">
-            <h2 className="text-3xl sm:text-4xl font-extrabold text-indigo-600 mb-6">
+            <h2 className="text-3xl sm:text-4xl font-extrabold text-indigo-200 mb-6">
               Gallery
             </h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -96,7 +96,7 @@ const Home = ({ events, galleryImages, bannerImages }) => {
           <div className="border-t border-indigo-400 my-10"></div>
 
           <section>
-            <h2 className="text-3xl sm:text-4xl font-extrabold text-indigo-600 mb-6">
+            <h2 className="text-3xl sm:text-4xl font-extrabold text-indigo-200 mb-6">
               Banners
             </h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">

@@ -15,6 +15,8 @@ import Link from '@mui/icons-material/Link';
 import LogoLight from '../assets/Logo_light.png';
 import { auth } from '../firebase';
 import ConfirmationDialogLogout from './ConfirmationDialogLogout';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const Sidebar = ({ onSelect, selectedTab }) => {
   const [isExpanded, setIsExpanded] = useState(false);
@@ -23,6 +25,22 @@ const Sidebar = ({ onSelect, selectedTab }) => {
 
   const toggleSidebar = () => {
     setIsExpanded(!isExpanded);
+  };
+
+  const showToast = () => {
+    toast.info('Made by Shankharishi and Samriddha', {
+      position: 'bottom-right',
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      style: {
+        backgroundColor: 'rgba(191, 219, 254, 1)', // bg-blue-200 with 20% opacity
+        color: '#3b82f6', // text-blue-500
+      },
+    });
   };
 
   const handleSelect = (view) => {
@@ -97,7 +115,10 @@ const Sidebar = ({ onSelect, selectedTab }) => {
       </nav>
       <div className={`absolute bottom-16 left-0 right-0 text-center`}>
         <img src={LogoLight} alt="Logo" className={`h-16 mx-auto my-4 ${isExpanded ? 'block' : 'hidden'} md:block`} />
-        <div className={`text-indigo-200 text-sm mt-4 ${isExpanded ? 'block' : 'hidden'} md:block`}>
+        <div 
+          onMouseEnter={showToast}
+          className={`text-indigo-200 text-sm mt-4 ${isExpanded ? 'block' : 'hidden'} md:block`}
+        >
           Version 1.0.1
         </div>
         <button
@@ -113,6 +134,7 @@ const Sidebar = ({ onSelect, selectedTab }) => {
         </button>
       </div>
       <ConfirmationDialogLogout open={dialogOpen} onClose={closeDialog} onConfirm={confirmLogout} />
+      <ToastContainer />
     </div>
   );
 };

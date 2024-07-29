@@ -77,10 +77,10 @@ const MembersList = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-50 to-purple-100 py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-10 py-12 px-4 sm:px-6 lg:px-8 rounded-xl">
       <div className="max-w-7xl mx-auto">
         <div className="bg-white rounded-xl shadow-xl overflow-hidden">
-          <div className="px-6 py-8 sm:px-10 sm:py-10 bg-gradient-to-r from-indigo-600 to-purple-600">
+          <div className="px-6 py-8 sm:px-10 sm:py-10 bg-gradient-to-r from-blue-600 to-indigo-600">
             <div className="flex flex-col sm:flex-row justify-between items-center">
               <div className="mb-6 sm:mb-0">
                 <h2 className="text-3xl font-extrabold text-white">Members Directory</h2>
